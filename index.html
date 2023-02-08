@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEEK_3</title>
+</head>
+<body bgcolor="yellow">
+    <div class="con1" style="text-align: center;">
+    <h1  style="color:red" >WEATHER FORECAST</h1>
+    Enter city name:<input type="text" id="abc"><br><br>
+    <input type="button" value="GetWeather" onclick="weather()"><br><br>
+    <p>
+    Country Name:<p id="con"></p><br><br>
+    Max temp:<p id="maxtemp"></p><br><br></p>
+    Min temp:<p id="mintemp"></p><br><br></p>
+    <div>
+        <canvas id="myChart"></canvas>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+       
+      // wdata.then((result)=>{
+
+
+     //   result.json().then((data)=>{
+       //    console.log(data);
+        //   console.log(data.main.temp_max,data.main.temp_min);
+      // })
+      // })
+     
+      function weather(){
+        var d=document.getElementById("abc").value;
+        var wdata=fetch("https://api.openweathermap.org/data/2.5/forecast?q="+d+"&appid=ced0e4936c69335dd6bc11acec155f73&units=metric");
+      wdata.then((result)=>{
+        result.json().then((data)=>{
+      let a=data.list;
+     let tempArray=[]
+     let DateArray=[]
+    //  console.log(main);
+    j=0;
+    let x=[]
+      for(i=0;i<a.length;i=i+8)
+      {tempArray[j]=a[i].main.temp;
+        DateArray=a[i].dt_txt.split(' ');
+        
+        console.log(tempArray)
+        
+     x[j]=DateArray[0];
+     j++;
+     console.log(x);
+     temp_min=a[i].main.temp_max
+     temp_max=a[i].main.temp_min
+      } //maxtemp.innerHtml=Math.max(...tempArray)
+      //console.log(Math.max(...tempArray))
+     document.getElementById("maxtemp").innerHTML=Math.max(...tempArray);
+      document.getElementById("mintemp").innerHTML=Math.min(...tempArray);
+      document.getElementById("con").innerHTML=data.city.country;
+      plot(tempArray,x)
+      })
+    })}
+     // a.forEach(element => {
+      //  console.log(element);
+      //  console.log(element.main.temp);
+      //});
+function plot(a,b)
+{
+        const ctx = document.getElementById('myChart');
+      
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: b,
+            datasets: [{
+              label: '# weather',
+              data: a,
+              borderWidth: 1
+            }]
+          },
+         // options: {
+         //   scales: {
+         //     y: {
+          //      beginAtZero: true
+          //    }
+          //  }
+         // }
+        });}
+      </script>
+</body></div>
+</html>
